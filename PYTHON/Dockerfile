@@ -20,19 +20,19 @@ RUN pip install --upgrade pip setuptools wheel
 RUN pip install poetry
 
 # Copy dependency files
-COPY PYTHON_BACKEND_TEMPLATE/pyproject.toml PYTHON_BACKEND_TEMPLATE/poetry.lock ./
+COPY PYTHON/pyproject.toml PYTHON/poetry.lock ./
 
 # Configure Poetry to avoid creating virtual environments and install dependencies
 RUN poetry config virtualenvs.create false \
     && poetry install --no-root --no-interaction --no-ansi
 
 # Copy application source code
-COPY PYTHON_BACKEND_TEMPLATE/api/ /app/api/
-COPY PYTHON_BACKEND_TEMPLATE/application/ /app/application/
-COPY PYTHON_BACKEND_TEMPLATE/domain/ /app/domain/
-COPY PYTHON_BACKEND_TEMPLATE/infrastructure/ /app/infrastructure/
-COPY PYTHON_BACKEND_TEMPLATE/config/ /app/config/
-COPY PYTHON_BACKEND_TEMPLATE/data/ /app/data/
+COPY PYTHON/api/ /app/api/
+COPY PYTHON/application/ /app/application/
+COPY PYTHON/domain/ /app/domain/
+COPY PYTHON/infrastructure/ /app/infrastructure/
+COPY PYTHON/config/ /app/config/
+COPY PYTHON/data/ /app/data/
 COPY tableOrders.json /app/tableOrders.json
 
 # Create a non-root user

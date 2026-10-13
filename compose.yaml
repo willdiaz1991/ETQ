@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: PYTHON_BACKEND_TEMPLATE/Dockerfile
+      dockerfile: PYTHON/Dockerfile
     environment:
       PRINT_AUDIT_DB_PATH: /var/lib/etq/printing_audit.sqlite3
     ports:
@@ -23,7 +23,7 @@ services:
 
   frontend:
     build:
-      context: ./PLANTILLA_BASE_ANGULAR_FRONT_APPS_2025
+      context: ./ANGULAR
       args:
         ENVIRONMENT: DOCKER
         BASE_PATH: /
