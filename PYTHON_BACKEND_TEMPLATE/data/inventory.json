@@ -1,0 +1,10 @@
+{
+  "inventory": [
+    {
+      "zone": "ZONA-PICKING-A",
+      "productCode": "SKU001",
+      "availableQty": 25,
+      "stocked": true
+    }
+  ]
+}

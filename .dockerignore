@@ -1,0 +1,14 @@
+.git
+.vscode
+.idea
+**/__pycache__
+**/*.py[cod]
+**/.venv
+**/venv
+**/node_modules
+**/.angular
+**/dist
+**/coverage
+**/htmlcov
+**/*.egg-info
+**/printing_audit.sqlite3

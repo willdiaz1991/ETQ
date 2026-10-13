@@ -1,0 +1,29 @@
+# Dependencias y artefactos (se reconstruyen dentro de la imagen)
+node_modules
+dist
+.angular
+out-tsc
+coverage
+
+# Control de versiones / IDE
+.git
+.gitignore
+.vscode
+.idea
+.editorconfig
+
+# Documentación y meta (no necesarios para el build)
+docs
+*.md
+mise.toml
+
+# Docker (deploy/ se necesita para la config de NGINX, NO excluir)
+Dockerfile
+.dockerignore
+
+# Utilidades locales / posibles secretos
+generate-test-token.js
+*.env
+.env*
+*.log
+.DS_Store

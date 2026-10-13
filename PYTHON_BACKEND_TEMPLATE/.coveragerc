@@ -1,0 +1,7 @@
+[coverage:run]
+omit =
+    infrastructure/database/*
+    domain/*
+    config/*
+    api/routes/docs_routes.py
+    api/main.py

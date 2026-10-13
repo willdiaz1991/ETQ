@@ -1,0 +1,174 @@
+<main class="print-page">
+  <section class="page-heading">
+    <p class="eyebrow">OPERACIÓN LOGÍSTICA</p>
+    <h1>Impresión de etiquetas</h1>
+    <p>Valida una etiqueta pre-generada antes de simular su impresión.</p>
+  </section>
+
+  <section class="panel print-panel" aria-labelledby="print-form-title">
+    <div class="panel-heading">
+      <div>
+        <p class="eyebrow">NUEVA SOLICITUD</p>
+        <h2 id="print-form-title">Datos de impresión</h2>
+      </div>
+      <span class="step-badge">ETQ / LPN</span>
+    </div>
+
+    <form [formGroup]="printForm" (ngSubmit)="submitPrint()" novalidate>
+      <div class="form-grid">
+        <div class="field">
+          <label for="lpn">LPN <span aria-hidden="true">*</span></label>
+          <input id="lpn" pInputText formControlName="lpn" autocomplete="off" />
+          @if (printForm.controls.lpn.touched && printForm.controls.lpn.invalid) {
+            <small class="field-error">Ingresa el LPN de la etiqueta.</small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="zone">Zona <span aria-hidden="true">*</span></label>
+          <input id="zone" pInputText formControlName="zone" autocomplete="off" />
+          @if (printForm.controls.zone.touched && printForm.controls.zone.invalid) {
+            <small class="field-error">Ingresa la zona solicitada.</small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="requestedBy">Usuario <span aria-hidden="true">*</span></label>
+          <input id="requestedBy" pInputText formControlName="requestedBy" autocomplete="username" />
+          @if (printForm.controls.requestedBy.touched && printForm.controls.requestedBy.invalid) {
+            <small class="field-error">Ingresa el usuario solicitante.</small>
+          }
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <p class="form-hint"><span aria-hidden="true">*</span> Campos obligatorios</p>
+        <p-button
+          type="submit"
+          [disabled]="isSubmitting()"
+          [label]="isSubmitting() ? 'Validando…' : 'Validar e imprimir'"
+          icon="pi pi-print"
+          [loading]="isSubmitting()"
+        />
+      </div>
+    </form>
+  </section>
+
+  @if (errorMessage()) {
+    <section class="notice notice-error" role="alert">
+      <strong>No se pudo completar la solicitud</strong>
+      <p>{{ errorMessage() }}</p>
+    </section>
+  }
+
+  @if (rejectionReasons().length > 0) {
+    <section class="notice notice-rejected" role="alert">
+      <strong>Solicitud rechazada</strong>
+      <p>Revisa las validaciones antes de volver a enviar la solicitud.</p>
+      <ul class="reason-list">
+        @for (reason of rejectionReasons(); track reason) {
+          <li>{{ reason }}</li>
+        }
+      </ul>
+    </section>
+  }
+
+  @if (result(); as printResult) {
+    <section class="notice notice-success result-panel" aria-live="polite" aria-atomic="true">
+      <div class="result-heading">
+        <div>
+          <p class="eyebrow">SOLICITUD PROCESADA</p>
+          <h2>Impresión autorizada</h2>
+        </div>
+      </div>
+
+      <p class="result-summary">
+        La etiqueta {{ printResult.response.idEtiqueta }} quedó registrada.
+      </p>
+
+      <dl class="response-details">
+        <div><dt>Orden de compra</dt><dd>{{ printResult.response.purchaseOrder }}</dd></div>
+        <div><dt>Orden TC</dt><dd>{{ printResult.response.tcOrderId }}</dd></div>
+        <div><dt>SKU</dt><dd>{{ printResult.response.sku }}</dd></div>
+        <div><dt>Unidades</dt><dd>{{ printResult.response.unidades }}</dd></div>
+      </dl>
+
+      @if (printResult.response.zpl) {
+        <details class="zpl-details">
+          <summary>Ver contenido ZPL simulado</summary>
+          <pre>{{ printResult.response.zpl }}</pre>
+        </details>
+      }
+    </section>
+  }
+
+  <section class="panel history-panel" aria-labelledby="history-title">
+    <div class="panel-heading history-heading">
+      <div>
+        <p class="eyebrow">TRAZABILIDAD</p>
+        <h2 id="history-title">Historial de impresiones</h2>
+      </div>
+      <div class="history-tools">
+        <label class="visually-hidden" for="historyFilter">Filtrar historial por LPN</label>
+        <input
+          id="historyFilter"
+          pInputText
+          [(ngModel)]="historyFilter"
+          [ngModelOptions]="{ standalone: true }"
+          (keyup.enter)="loadHistory()"
+          placeholder="Filtrar por LPN"
+        />
+        <p-button label="Buscar" icon="pi pi-search" severity="secondary" (onClick)="loadHistory()" />
+        @if (historyFilter) {
+          <p-button label="Limpiar" severity="secondary" [outlined]="true" (onClick)="clearHistoryFilter()" />
+        }
+        <p-button
+          icon="pi pi-refresh"
+          severity="secondary"
+          [outlined]="true"
+          ariaLabel="Actualizar historial"
+          (onClick)="loadHistory()"
+        />
+      </div>
+    </div>
+
+    @if (isLoadingHistory()) {
+      <p class="empty-state" role="status">Cargando historial…</p>
+    } @else if (history().length === 0) {
+      <p class="empty-state">No hay solicitudes registradas para este filtro.</p>
+    } @else {
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Fecha</th>
+              <th scope="col">ETQ</th>
+              <th scope="col">LPN</th>
+              <th scope="col">Zona</th>
+              <th scope="col">Usuario</th>
+              <th scope="col">Resultado</th>
+              <th scope="col">Evento</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (entry of history(); track entry.requestId) {
+              <tr>
+                <td>{{ entry.requestedAt | date: 'short' }}</td>
+                <td>{{ entry.etqId ?? '—' }}</td>
+                <td class="mono">{{ entry.lpn }}</td>
+                <td>{{ entry.zone ?? '—' }}</td>
+                <td>{{ entry.requestedBy ?? '—' }}</td>
+                <td>
+                  <span class="status-badge" [class.status-approved]="entry.approved" [class.status-rejected]="!entry.approved">
+                    {{ entry.approved ? 'Aprobada' : 'Rechazada' }}
+                  </span>
+                </td>
+                <td>{{ entry.eventType }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</main>

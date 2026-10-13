@@ -1,0 +1,38 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: PYTHON_BACKEND_TEMPLATE/Dockerfile
+    environment:
+      PRINT_AUDIT_DB_PATH: /var/lib/etq/printing_audit.sqlite3
+    ports:
+      - "8080:8080"
+    volumes:
+      - print-audit:/var/lib/etq
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/openapi.json', timeout=3)"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./PLANTILLA_BASE_ANGULAR_FRONT_APPS_2025
+      args:
+        ENVIRONMENT: DOCKER
+        BASE_PATH: /
+    depends_on:
+      backend:
+        condition: service_healthy
+    ports:
+      - "4200:8080"
+    restart: unless-stopped
+
+volumes:
+  print-audit:

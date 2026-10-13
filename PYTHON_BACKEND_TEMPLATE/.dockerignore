@@ -1,0 +1,49 @@
+# Exclude Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Exclude virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Exclude version control directories
+.git/
+.gitignore
+
+# Exclude Docker files
+Dockerfile
+.dockerignore
+
+# Exclude environment files
+.env
+#.env.*
+
+# Exclude test directories
+tests/
+
+# Exclude build and deployment files
+build/
+dist/
+*.egg-info/
+*.egg
+*.whl
+
+# Exclude IDE and editor files
+.vscode/
+.idea/
+*.swp
+*~
+
+# Exclude coverage reports
+.coverage
+htmlcov/
+coverage.xml
+
+# Exclude logs
+*.log
+
+# Exclude static files
+#api/static/
