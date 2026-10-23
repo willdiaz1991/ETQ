@@ -1,42 +1,9 @@
-@if (isLoading()) {
-  <!-- Pantalla de carga mientras valida el token -->
-  <div class="flex h-screen items-center justify-center">
-    <app-loading></app-loading>
-  </div>
-} @else if (isAuthenticated()) {
-  <!-- Contenido principal si está autenticado -->
-  <app-header></app-header>
+<app-header></app-header>
 
-  <div class="w-full px-6">
-    <div class="w-full mt-4">
-      <router-outlet></router-outlet>
-    </div>
+<div class="w-full px-6">
+  <div class="w-full mt-4">
+    <router-outlet></router-outlet>
   </div>
+</div>
 
-  <app-footer></app-footer>
-} @else {
-  <!-- Pantalla de error si no está autenticado -->
-  <div class="flex h-screen items-center justify-center bg-white p-4">
-    <div class="max-w-md rounded-lg border-2 border-yellow-400 bg-white p-8 shadow-lg">
-      <!-- Icono de advertencia -->
-      <div class="mb-6 flex justify-center">
-        <div class="flex h-20 w-20 items-center justify-center rounded-full bg-yellow-100">
-          <span class="material-icons text-yellow-600" style="font-size: 48px;">report_problem</span>
-        </div>
-      </div>
-
-      <!-- Logo y mensaje -->
-      <div class="flex items-center gap-4">
-        <div class="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 font-bold text-blue-800">
-          ETQ
-        </div>
-        <div class="flex-1">
-          <h2 class="mb-2 text-xl font-bold">Algo sucedió...</h2>
-          <p class="text-gray-700">
-            No se pudo iniciar la sesión de demostración. Recarga la aplicación e inténtalo de nuevo.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-}
+<app-footer></app-footer>

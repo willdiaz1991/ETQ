@@ -1,6 +1,7 @@
 import json
 import os
 import sqlite3
+from contextlib import closing
 from dataclasses import replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -20,7 +21,7 @@ class PrintAuditRepository:
         )
 
     def record_attempt(self, decision: PrintDecision) -> PrintAuditEntry:
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             connection.execute("BEGIN IMMEDIATE")
             self._create_table(connection)
             previously_printed = self._has_successful_print(connection, decision.lpn)
@@ -61,7 +62,7 @@ class PrintAuditRepository:
         return entry
 
     def list_history(self, lpn: Optional[str] = None, limit: int = 100) -> List[PrintAuditEntry]:
-        with self._connect() as connection:
+        with closing(self._connect()) as connection, connection:
             self._create_table(connection)
             if lpn:
                 rows = connection.execute(

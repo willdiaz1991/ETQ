@@ -3,7 +3,6 @@ from typing import Optional, Sequence
 from domain.models.printing import (
     InventoryAvailability,
     PrintDecision,
-    PrintLabel,
     PrintOrder,
     PrintRequest,
 )
@@ -19,12 +18,7 @@ def evaluate_print_request(
     if not lpn:
         return _reject(request, "El LPN es obligatorio.", previously_printed)
 
-    matches = [
-        (order, label)
-        for order in orders
-        for label in order.labels
-        if label.lpn_id.strip().casefold() == lpn.casefold()
-    ]
+    matches = [(order, label) for order in orders for label in order.labels if label.lpn_id.strip().casefold() == lpn.casefold()]
     if not matches:
         return _reject(request, "No existe una etiqueta para el LPN indicado.", previously_printed)
     if len(matches) > 1:
@@ -50,11 +44,7 @@ def evaluate_print_request(
             continue
 
         stock = next(
-            (
-                item
-                for item in inventory
-                if item.product_code == product.product_code and item.zone.casefold() == (zone or "").casefold()
-            ),
+            (item for item in inventory if item.product_code == product.product_code and item.zone.casefold() == (zone or "").casefold()),
             None,
         )
         if stock is None:

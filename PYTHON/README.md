@@ -51,6 +51,11 @@ docker compose down
 
 ## Endpoints
 
+### `GET /health`
+
+Confirma que la API está disponible. No consulta Oracle ni otros servicios externos, ya que esta
+demostración funciona con datos mock y auditoría local.
+
 ### `POST /printing/validate`
 
 Valida e intenta imprimir una etiqueta. El LPN es obligatorio; `zone` y `requestedBy` son

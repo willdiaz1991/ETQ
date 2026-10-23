@@ -4,34 +4,26 @@ import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { DialogService } from 'primeng/dynamicdialog';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { Interceptors } from './interceptors/interceptor';
-  /**
-   *configuracion de estilos de proyecto
-   */
+import { provideHttpClient } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-     { provide: LOCALE_ID, useValue: 'es-CO' },
+    { provide: LOCALE_ID, useValue: 'es-CO' },
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideHttpClient(
-        withInterceptors([Interceptors])
-    ),
+    provideHttpClient(),
     provideAnimationsAsync(),
     providePrimeNG({
-      theme:{
-        preset:Aura,
-         options: {
+      theme: {
+        preset: Aura,
+        options: {
           prefix: 'p',
           scale: 0.9,
-          darkModeSelector: false
+          darkModeSelector: false,
         },
       },
-      ripple: true
-    }),
- DialogService
+      ripple: true,
+    })
   ]
 };

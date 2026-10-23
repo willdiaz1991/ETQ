@@ -26,12 +26,3 @@ class Config:
             logger.log_information(f"Environment file loaded successfully: {env_file}", method="Config.__init__")
         else:
             logger.log_information("Optional .env.dev file not present; using system environment variables.", method="Config.__init__")
-
-    def get(self, key: str):
-        """Get the value of an environment variable."""
-        value = os.getenv(key)
-        if value is not None:
-            logger.log_information(f"Environment variable loaded: {key}", method="Config.get")
-        else:
-            logger.log_warning(f"Environment variable {key} is not defined.", method="Config.get")
-        return value

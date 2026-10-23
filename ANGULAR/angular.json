@@ -29,10 +29,6 @@
             ],
             "styles": [
               "src/styles.scss"
-            ],
-            "allowedCommonJsDependencies": [
-              "crypto-js",
-              "file-saver"
             ]
           },
           "configurations": {

@@ -40,7 +40,7 @@ def create_app() -> FastAPI:
     app.include_router(printing_router)
 
     @app.exception_handler(StarletteHTTPException)
-    async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    async def http_exception_handler(_: Request, exc: StarletteHTTPException):
         if exc.status_code == 404:
             api_response = ApiResponse.create_error(constants.ERR_NOT_FOUND, meta=None)
             return JSONResponse(
